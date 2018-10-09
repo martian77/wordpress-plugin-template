@@ -30,14 +30,14 @@ class PT_TemplateLoader
 	 * @return 	string 							Path to the template file.
 	 */
 	public function locate_template( $template_name, $template_path = '', $default_path = '' ) {
-		// Set variable to search in electricsocial folder of theme.
+		// Set variable to search in the matching plugin folder of theme.
 		if ( ! $template_path ) {
-			$template_path = 'electricsocial/';
+			$template_path = trailingslashit( PT_TEMPLATE_PATH );
 		}
 
 		// Set default plugin templates path.
 		if ( ! $default_path ) {
-			$default_path = ESOC_ABSPATH . 'templates/'; // Path to the template folder
+			$default_path = PT_ABSPATH . 'templates/'; // Path to the template folder
 		}
 
 		// Search template file in theme folder.
@@ -50,7 +50,7 @@ class PT_TemplateLoader
 		if ( ! $template ) {
 			$template = $default_path . $template_name;
 		}
-		return apply_filters( 'esoc_locate_template', $template, $template_name, $template_path, $default_path );
+		return apply_filters( PT_PLUGIN_SHORTNAME . '_locate_template', $template, $template_name, $template_path, $default_path );
 	}
 
 	/**

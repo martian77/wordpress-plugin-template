@@ -35,7 +35,11 @@ class PT_Main
 	 */
 	private function init()
 	{
-		//
+		// Add any actions.
+		add_action( 'admin_init', [$this, 'admin_init'] );
+
+		// Instantiate any classes.
+		new PT_Admin_Settings();
 	}
 
 	/**
@@ -43,8 +47,12 @@ class PT_Main
 	 */
 	private function define_constants()
 	{
-		$this->define( 'PT_PLUGIN_SHORTNAME', 'PT');
+		// Display name for the plugin. Used for settings page name etc.
+		$this->define( 'PT_PLUGIN_NAME', 'Plugin Template' );
+		// This constant should be changed for your new plugin. Make it lowercase!
+		$this->define( 'PT_PLUGIN_SHORTNAME', 'pt');
 		$this->define( 'PT_ABSPATH', dirname( PT_PLUGIN_FILE ) . '/' );
+		$this->define( 'PT_TEMPLATE_PATH', 'plugintemplate');
 	}
 
 	/**
@@ -52,8 +60,17 @@ class PT_Main
 	 */
 	private function includes()
 	{
-		$shortname = strtolower( PT_PLUGIN_SHORTNAME );
-		include_once PT_ABSPATH . 'includes/class-' . $shortname . '-autoloader.php';
+		include_once PT_ABSPATH . 'includes/class-' . PT_PLUGIN_SHORTNAME . '-autoloader.php';
+	}
+
+	/**
+	 * Include anything that only needs initiating for admins.
+	 *
+	 * @return [type] [description]
+	 */
+	public function admin_init()
+	{
+
 	}
 
 	/**

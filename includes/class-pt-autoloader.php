@@ -42,15 +42,14 @@ class PT_autoloader {
   public function autoload( $class ) {
     $class = strtolower( $class );
 
-    if ( 0 !== strpos($class, $shortname . '_')) {
+    if ( 0 !== strpos($class, PT_PLUGIN_SHORTNAME . '_')) {
       return;
     }
 
     $file = $this->get_filename_from_classname( $class );
     $path = '';
-    $shortname = strtolower( PT_PLUGIN_SHORTNAME );
 
-    if ( 0 === strpos( $class, $shortname . '_admin_' ) ) {
+    if ( 0 === strpos( $class, PT_PLUGIN_SHORTNAME . '_admin_' ) ) {
       $path = $this->include_path . 'admin/';
     }
 
@@ -84,4 +83,5 @@ class PT_autoloader {
   }
 }
 
+// Create the autoloader. 
 new PT_autoloader();

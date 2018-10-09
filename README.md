@@ -19,3 +19,4 @@ To create a project based on this template:
   ```
 - Replace value of PT_PLUGIN_SHORTNAME with your plugin shortname.
 - Search and replace all instances of PT_ to find constants and classnames.
+- Search for plugintemplate and replace as required. 
