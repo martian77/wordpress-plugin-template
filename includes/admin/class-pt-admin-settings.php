@@ -29,6 +29,13 @@ class PT_Admin_Settings
   private $settings_name;
 
   /**
+   * Array of settings details.
+   * @since 0.0.1
+   * @var array
+   */
+  private $settings;
+
+  /**
    * Contains any messages sent.
    * @since 0.0.1
    * @var string
@@ -44,6 +51,8 @@ class PT_Admin_Settings
   {
     $this->menu_slug = PT_PLUGIN_SHORTNAME . '_settings';
     $this->settings_name = PT_PLUGIN_SHORTNAME . '_settings';
+    // See this function if you need to change the available settings.
+    $this->set_settings_details();
 
     // Add actions.
     add_action( 'admin_init', [$this, 'admin_init'] );
@@ -93,15 +102,6 @@ class PT_Admin_Settings
     $options_name = $this->settings_name;
     $page_name = $this->menu_slug;
     include dirname( __FILE__ ) . '/views/html_pt_admin_settings.php';
-  }
-
-  /**
-   * Set up the intro to the main settings section.
-   * @return void
-   */
-  public function main_section_text()
-  {
-    echo '<p>Main section for settings</p>';
   }
 
   /**
@@ -156,6 +156,25 @@ class PT_Admin_Settings
   }
 
   /**
+   * Catch any calls to display section text.
+   *
+   * @since 0.0.1
+   * @throws BadMethodCallException If not a recognised function.
+   * @param  string $name Name of the function being called.
+   * @param  array $args  Arguments being passed to the function.
+   * @return void
+   */
+  public function __call( $name, $args ) {
+    if ( 0 < strpos( $name, '_section_text') ) {
+      $section_name = str_replace( '_section_text', '', $name );
+      $this->display_section_text( $section_name );
+    }
+    else {
+      throw new BadMethodCallException( 'Method [' . $name .'] does not exist.' );
+    }
+  }
+
+  /**
    * This sets up all of settings for the page.
    * @since 0.0.1
    * @return void
@@ -165,17 +184,39 @@ class PT_Admin_Settings
     // We set the option group and option name to the same thing here.
     // Also, everything gets saved under a single options entry.
     register_setting( $this->settings_name, $this->settings_name );
+    $settings = $this->settings;
 
-    $main_section = $this->settings_name . '_main';
-    add_settings_section (
-      $main_section,
-      PT_PLUGIN_NAME . ' Main',
-      array( $this, 'main_section_text' ),
-      $this->menu_slug
-    );
+    foreach ( $settings as $section_name => $section ) {
+      // Add the section
+      add_settings_section (
+        $section_name,
+        $section['title'],
+        array( $this, $section_name . '_section_text' ),
+        $this->menu_slug
+      );
+      foreach ( $section['settings'] as $setting_name => $setting ) {
+        // Then add the fields to this section. Pass the setting name in the final args array.
+        add_settings_field( $setting_name, $setting['title'], array($this, 'render_field'), $this->settings_name, $section_name, ['option_name' => $setting_name, 'type' => $setting['type'] ] );
+      }
+    }
+  }
 
-    // Then add the fields to this section. Pass the setting name in the final args array.
-    add_settings_field( 'first_field', 'First Setting Field', array($this, 'render_field'), $this->settings_name, $main_section, ['option_name' => 'first_field'] );
+  /**
+   * Displays the section text at the top of any section.
+   *
+   * Note that the text to display needs to be added to the settings array.
+   *
+   * @since 0.0.1
+   * @param  string $section_name The name of the section being displayed.
+   * @return void
+   */
+  private function display_section_text( $section_name )
+  {
+    $settings = $this->settings;
+    if ( ! isset( $settings[ $section_name ] ) ) {
+      return;
+    }
+    echo $settings[ $section_name ][ 'section_text' ];
   }
 
   /**
@@ -194,4 +235,25 @@ class PT_Admin_Settings
     echo '<input type="text" size="' . $field_length . '" id="' . $field_name . '" name="' . $field_name . '" value="' . $value . '"/>';
   }
 
+  /**
+   * Provides a single place to change the settings for the plugin.
+   *
+   * @return array
+   */
+  private function set_settings_details()
+  {
+    $settings = [];
+    $settings['main'] = [
+      'section_name' => $this->settings_name . '_main',
+      'title' => PT_PLUGIN_NAME . ' Main',
+      'section_text' => '<p>Main section for settings</p>',
+      'settings' => [
+        'first_field' => [
+          'title' => 'First Setting Field',
+          'type' => 'text',
+        ],
+      ],
+    ];
+    $this->settings = $settings;
+  }
 }
