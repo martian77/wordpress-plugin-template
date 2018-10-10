@@ -101,7 +101,7 @@ class PT_Admin_Settings
   {
     $options_name = $this->settings_name;
     $page_name = $this->menu_slug;
-    include dirname( __FILE__ ) . '/views/html_pt_admin_settings.php';
+    include dirname( __FILE__ ) . '/views/html-pt-admin-settings.php';
   }
 
   /**
