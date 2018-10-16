@@ -107,6 +107,7 @@ class PT_Admin_Settings
   /**
    * Parses any message added on page load.
    *
+   * @since 0.0.1
    * @return void
    */
   public function parse_message()
@@ -131,6 +132,7 @@ class PT_Admin_Settings
   /**
    * Renders any admin message.
    *
+   * @since 0.0.1
    * @return void
    */
   public function render_message()
@@ -143,8 +145,6 @@ class PT_Admin_Settings
    * Renders a settings field.
    *
    * The default here is to always render a text field.
-   * This could easily be extended to pass a field type in the args and display
-   * different types of fields that way.
    *
    * @param array $args The arguments passed when add_settings_field called.
    * @return void       This needs to echo the HTML output.
@@ -152,7 +152,17 @@ class PT_Admin_Settings
   public function render_field( array $args )
   {
     $option_name = $args['option_name'];
-    $this->setting_text_value( $option_name );
+    $field_type = $args['type'];
+    $default_value = isset( $args['default_value'] ) ? $args['default_value'] : '';
+
+    switch( $field_type ) {
+      case 'checkbox':
+        $this->setting_checkbox_value( $option_name, $default_value );
+        break;
+      case 'text':
+      default:
+        $this->setting_text_value( $option_name, $default_value );
+      }
   }
 
   /**
@@ -172,6 +182,28 @@ class PT_Admin_Settings
     else {
       throw new BadMethodCallException( 'Method [' . $name .'] does not exist.' );
     }
+  }
+
+  /**
+   * Sets the database options to match default if necessary.
+   *
+   * @since 0.0.2
+   * @return bool  True if update successful, false otherwise.
+   */
+  public function update_default_options()
+  {
+    $options = get_option( $this->setting_name, [] );
+    $settings = $this->settings;
+    foreach ( $settings as $section_name => $section )
+    {
+      foreach ( $section['settings'] as $setting_name => $setting ) {
+        if ( ! isset( $options[ $setting_name ] ) ) {
+          $default_value = isset( $setting[ 'default_value' ] ) ? $setting[ 'default_value' ] : '';
+          $options[ $setting_name ] = $default_value;
+        }
+      }
+    }
+    return update_option( $this->setting_name, $options );
   }
 
   /**
@@ -236,8 +268,27 @@ class PT_Admin_Settings
   }
 
   /**
-   * Provides a single place to change the settings for the plugin.
+   * Set up a checkbox setting field.
    *
+   * This is a standalone checkbox, not a group.
+   *
+   * @since 0.0.2
+   * @param  string $option_name Name of the option.
+   * @param  string $default_value Default value for this field.
+   * @return void
+   */
+  private function setting_checkbox_value( $option_name, $default_value )
+  {
+    $options = get_option( $this->settings_name );
+    $value = ! empty( $options[ $option_name ] ) ? $options[ $option_name ] : $default_value;
+    $field_name = $this->settings_name . '[' . $option_name . ']';
+    $checked = checked( 1, $value, false );
+    echo '<input type="checkbox" id="' . $field_name . '" name="'. $field_name . '" value="1" ' . $checked . '>';
+  }
+
+  /**
+   * Provides a single place to change the settings for the plugin.
+   * @since 0.0.1
    * @return array
    */
   private function set_settings_details()
@@ -251,6 +302,7 @@ class PT_Admin_Settings
         'first_field' => [
           'title' => 'First Setting Field',
           'type' => 'text',
+          'default_value' => '',
         ],
       ],
     ];

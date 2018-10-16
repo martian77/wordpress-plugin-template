@@ -31,6 +31,7 @@ class PT_Main
 	/**
 	 * Initialise anything that needs doing.
 	 *
+	 * @since 0.0.1
 	 * @return void
 	 */
 	private function init()
@@ -39,7 +40,9 @@ class PT_Main
 		add_action( 'admin_init', [$this, 'admin_init'] );
 
 		// Instantiate any classes.
-		new PT_Admin_Settings();
+		$settings = new PT_Admin_Settings();
+		// And check the latest default options are set.
+		$settings->update_default_options();
 	}
 
 	/**
@@ -57,6 +60,8 @@ class PT_Main
 
 	/**
 	 * Class includes for the plugin.
+	 *
+	 * @since 0.0.1
 	 */
 	private function includes()
 	{
