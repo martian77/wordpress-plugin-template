@@ -40,7 +40,8 @@ add_action( 'init', function() {
  * @since 0.0.1
  * @return void
  */
-function pt_activate_plugin() {
+function pt_activate_plugin()
+{
   $module_dependencies = [
     // Put any dependencies in here.
     // 'classname' => 'Module display title',
@@ -55,4 +56,19 @@ function pt_activate_plugin() {
   }
 }
 
-register_activation_hook( __FILE__, 'aac_activate_plugin' );
+register_activation_hook( __FILE__, 'pt_activate_plugin' );
+
+/**
+ * Cleans up the database on uninstall.
+ *
+ * @since 0.0.2
+ * @return void
+ */
+function pt_uninstall_plugin()
+{
+  global $wpdb;
+  $option_name = PT_PLUGIN_SHORTNAME . '_%';
+  $wpdb->query( "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE '{$option_name}';");
+}
+
+register_uninstall_hook( __FILE__, 'pt_uninstall_plugin' );
