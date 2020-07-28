@@ -287,6 +287,30 @@ class PT_Admin_Settings
   }
 
   /**
+     * Set up a number settings field.
+     *
+     * @since 0.0.3
+     * @param  string  $option_name  Name of the option.
+     * @param  string  $default_value Default string.
+     * @param  string  $description  Help text.
+     * @param  array   $args   Field specific args.
+     * @return void
+     */
+    protected function setting_number_value( $option_name, $default_value, $description, $args )
+    {
+        $step = ! empty( $args['step'] ) && is_numeric( $arg['step'] ) ? $args['step'] : 1;
+
+        $options = $this->get_current_options();
+        $value = ! empty( $options[ $option_name ] ) ? $options[ $option_name ] : $default_value;
+        $field_name = $this->settings_name . '[' . $option_name . ']';
+        echo '<input type="number" step="' . $step . '" min="0" id="' . $field_name . '" name="' . $field_name . '" value="' . $value . '"/>';
+
+        if ( ! empty( $description ) ) {
+            echo '<p class="description" id="' . $field_name . '-description">' . $description .'</p>';
+        }
+    }
+
+  /**
    * Provides a single place to change the settings for the plugin.
    * @since 0.0.1
    * @return array

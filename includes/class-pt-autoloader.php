@@ -83,5 +83,5 @@ class PT_autoloader {
   }
 }
 
-// Create the autoloader. 
+// Create the autoloader.
 new PT_autoloader();

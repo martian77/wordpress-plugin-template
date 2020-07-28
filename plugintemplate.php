@@ -4,7 +4,7 @@
 Plugin Name: Plugin Template
 Plugin URI:  https://electric.studio
 Description: Provide a template plugin.
-Version:     0.0.2
+Version:     0.0.3
 Author:      Electric Studio
 Author URI:  https://www.electricstudio.co.uk/about/
 */
