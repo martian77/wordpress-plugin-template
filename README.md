@@ -17,6 +17,10 @@ To create a project based on this template:
     mv "$file" "${file/-pt-/-??-}";
   done
   ```
+  (Note that sometimes when you copy this out the quotes may get swapped for smart quotes. It will break.)
+  
 - Replace value of PT_PLUGIN_SHORTNAME with your plugin shortname.
 - Search and replace all instances of PT_ to find constants and classnames.
-- Search for plugintemplate and replace as required. 
+- Search and replace -pt- for file includes.
+- Search for plugintemplate and replace as required.
+- Don't forget to change the notes at the top of the plugin main file.
