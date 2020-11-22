@@ -1,5 +1,7 @@
 <?php
 
+namespace PT;
+
 if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
@@ -13,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author Electric Studio
  * @since 0.0.1
  */
-class PT_autoloader {
+class Autoloader {
 
   /**
    * Path to the includes directory.
@@ -42,20 +44,17 @@ class PT_autoloader {
   public function autoload( $class ) {
     $class = strtolower( $class );
 
-    if ( 0 !== strpos($class, PT_PLUGIN_SHORTNAME . '_')) {
+    if ( 0 !== strpos($class, PT_PLUGIN_SHORTNAME ) ) {
       return;
     }
 
-    $file = $this->get_filename_from_classname( $class );
-    $path = '';
+    $classArray = explode('\\', $class);
+    unset($classArray[0]);
 
-    if ( 0 === strpos( $class, PT_PLUGIN_SHORTNAME . '_admin_' ) ) {
-      $path = $this->include_path . 'admin/';
-    }
+    $file = $this->get_filename_from_classname( array_pop($classArray) );
+    $path = trailingslashit(implode('/', $classArray));
 
-    if ( empty($path) || ! $this->load_file($path . $file) ) {
-      $this->load_file( $this->include_path . $file );
-    }
+    $this->load_file( $this->include_path . $path . $file );
   }
 
   /**
@@ -65,7 +64,7 @@ class PT_autoloader {
    * @return String            name of file
    */
   private function get_filename_from_classname( $classname ) {
-    return 'class-' . str_replace( '_', '-', $classname ) . '.php';
+    return str_replace( '_', '-', $classname ) . '.php';
   }
 
   /**
@@ -84,4 +83,4 @@ class PT_autoloader {
 }
 
 // Create the autoloader.
-new PT_autoloader();
+new Autoloader();

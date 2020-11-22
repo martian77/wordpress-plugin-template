@@ -1,5 +1,13 @@
 <?php
 
+namespace PT;
+
+use PT\Admin\AdminSettings;
+
+if ( ! defined( 'ABSPATH' ) ) {
+  exit;
+}
+
 /**
  * Main plugin class.
  *
@@ -9,7 +17,7 @@
  * @author Electric Studio
  * @since 0.0.1
  */
-class PT_Main
+class Main
 {
 
 	/**
@@ -40,7 +48,7 @@ class PT_Main
 		add_action( 'admin_init', [$this, 'admin_init'] );
 
 		// Instantiate any classes.
-		$settings = new PT_Admin_Settings();
+		$settings = new AdminSettings();
 		// And check the latest default options are set.
 		$settings->update_default_options();
 	}
@@ -65,7 +73,7 @@ class PT_Main
 	 */
 	private function includes()
 	{
-		include_once PT_ABSPATH . 'includes/class-' . PT_PLUGIN_SHORTNAME . '-autoloader.php';
+		include_once PT_ABSPATH . 'includes/autoloader.php';
 	}
 
 	/**

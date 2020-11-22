@@ -10,16 +10,8 @@ To create a project based on this template:
   git archive --format=zip -o ../plugintemplate.zip master
   ```
 - Go and expand plugintemplate.zip, then rename the folder to the new plugin name.
-- You can use the following bash script to rename all of the class files, just swap out -??- for your plugin shortname.
-  ```
-  for file in *-pt-*.php
-  do
-    mv "$file" "${file/-pt-/-??-}";
-  done
-  ```
-  (Note that sometimes when you copy this out the quotes may get swapped for smart quotes. It will break.)
-  
 - Replace value of PT_PLUGIN_SHORTNAME with your plugin shortname.
+- Search and replace the PT\ namespace.
 - Search and replace all instances of PT_ to find constants and classnames.
 - Search and replace -pt- for file includes.
 - Search for plugintemplate and replace as required.

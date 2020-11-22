@@ -1,5 +1,7 @@
 <?php
 
+namespace PT\Admin;
+
 if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
@@ -11,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.0.1
  */
-class PT_Admin_Settings
+class AdminSettings
 {
 
   /**
@@ -101,7 +103,7 @@ class PT_Admin_Settings
   {
     $options_name = $this->settings_name;
     $page_name = $this->menu_slug;
-    include dirname( __FILE__ ) . '/views/html-pt-admin-settings.php';
+    include dirname( __FILE__ ) . '/views/admin-settings.php';
   }
 
   /**

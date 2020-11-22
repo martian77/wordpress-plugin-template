@@ -4,7 +4,7 @@
 Plugin Name: Plugin Template
 Plugin URI:  https://electric.studio
 Description: Provide a template plugin.
-Version:     0.0.3
+Version:     0.0.4
 Author:      Electric Studio
 Author URI:  https://www.electricstudio.co.uk/about/
 */
@@ -24,13 +24,13 @@ if ( ! defined( 'PT_TRANSLATE_DOMAIN' ) ) {
 }
 
 // Include the main plugin class.
-if ( ! class_exists( 'PT_Main' ) ) {
-  include_once dirname( __FILE__ ) . '/includes/class-pt-main.php';
+if ( ! class_exists( 'PT\Main' ) ) {
+  include_once dirname( __FILE__ ) . '/includes/main.php';
 }
 
 // Initialise the main plugin class on init.
 add_action( 'init', function() {
-    PT_Main::get_instance();
+    PT\Main::get_instance();
   }
 );
 

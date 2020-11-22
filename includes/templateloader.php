@@ -1,5 +1,7 @@
 <?php
 
+namespace PT;
+
 if ( ! defined( 'ABSPATH' ) ) {
   exit;
 }
@@ -11,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author Electric Studio
  * @since 0.0.1
  */
-class PT_TemplateLoader
+TemplateLoader
 {
 	/**
 	 * Locate template.
